@@ -45,6 +45,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Vector3 project = Project(Subtract(center1, segment.origin), segment.diff);
 	Vector3 closestPoint = CrosestPoint(center1, segment);
 
+
 	// 速度
 	const float moveSpeed = 0.1f;
 
