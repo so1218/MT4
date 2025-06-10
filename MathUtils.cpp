@@ -103,3 +103,13 @@ Vector3 ClosestPointOnSegment(const Vector3& p, const Segment& seg)
 	t = std::clamp(t, 0.0f, 1.0f);
 	return a + ab * t;
 }
+
+Quaternion Multiply(const Quaternion& lhs, const Quaternion& rhs)
+{
+	return {
+		lhs.w * rhs.x + lhs.x * rhs.w + lhs.y * rhs.z - lhs.z * rhs.y,
+		lhs.w * rhs.y - lhs.x * rhs.z + lhs.y * rhs.w + lhs.z * rhs.x,
+		lhs.w * rhs.z + lhs.x * rhs.y - lhs.y * rhs.x + lhs.z * rhs.w,
+		lhs.w * rhs.w - lhs.x * rhs.x - lhs.y * rhs.y - lhs.z * rhs.z
+	};
+}
