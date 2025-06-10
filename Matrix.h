@@ -59,3 +59,12 @@ Vector3 WorldToScreen(const Vector3& worldPos, const Matrix4x4& WVPMatrix, float
 
 Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle);
 Matrix4x4 DirectionToDirection(const Vector3& from, const Vector3& to);
+
+// 任意軸回転を表すQuaternionの生成
+Quaternion MakeRotateAxisAngleQuaternion(const Vector3& axis, float angle);
+
+// ベクトルをQuaternionで回転させた結果のベクトルを求める
+Vector3 RotateVector(const Vector3& vector, const Quaternion& quaternion);
+
+// Quaternionから回転行列を求める
+Matrix4x4 MakeRotateMatrixQuaternion(const Quaternion& quaternion);
