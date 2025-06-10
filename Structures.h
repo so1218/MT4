@@ -59,6 +59,13 @@ struct Vector3
 	{
 		return scalar != 0 ? Vector3(x / scalar, y / scalar, z / scalar) : Vector3(0, 0, 0);
 	}
+
+	// 単項マイナス演算子
+	Vector3 operator-() const
+	{
+		return Vector3(-x, -y, -z);
+	}
+
 	// クロス積 (外積)
 	Vector3 cross(const Vector3& other) const {
 		return Vector3(
@@ -215,4 +222,10 @@ struct Capsule
 {
 	Segment segment;
 	float radius;
+};
+
+struct Quaternion
+{
+	float x, y, z, w;
+
 };

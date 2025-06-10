@@ -58,5 +58,4 @@ Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, f
 Vector3 WorldToScreen(const Vector3& worldPos, const Matrix4x4& WVPMatrix, float screenWidth, float screenHeight);
 
 Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle);
-
 Matrix4x4 DirectionToDirection(const Vector3& from, const Vector3& to);
