@@ -189,6 +189,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Matrix4x4 rotationMatrixQuaternion = MakeRotateMatrixQuaternion(rotationQuaternion);
 	Vector3 rotateByMatrix = Transform(pointY, rotationMatrixQuaternion);
 
+	Quaternion slerpStart = MakeRotateAxisAngleQuaternion({ 0.71f,0.71f,0.0f }, 0.3f);
+	Quaternion slerpEnd = MakeRotateAxisAngleQuaternion({ 0.71f,0.0f,0.71f }, 3.14159265f);
+
+	Quaternion slerpResult0 = Slerp(slerpStart, slerpEnd, 0.0f);
+	Quaternion slerpResult1 = Slerp(slerpStart, slerpEnd, 0.3f);
+	Quaternion slerpResult2 = Slerp(slerpStart, slerpEnd, 0.5f);
+	Quaternion slerpResult3 = Slerp(slerpStart, slerpEnd, 0.7f);
+	Quaternion slerpResult4 = Slerp(slerpStart, slerpEnd, 1.0f);
+
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
 		// フレームの開始
@@ -433,10 +442,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Novice::ScreenPrintf(0, kRowHeight * 5, "%.03f, %.03f, %.03f, %.03f : mul2", mul2.x, mul2.y, mul2.z, mul2.w);
 		Novice::ScreenPrintf(0, kRowHeight * 6, "%.03f : norm1", norm1);*/
 
-		Novice::ScreenPrintf(0, 0, "%.03f, %.03f, %.03f, %.03f : rotation", rotationQuaternion.x, rotationQuaternion.y, rotationQuaternion.z, rotationQuaternion.w);
+		/*Novice::ScreenPrintf(0, 0, "%.03f, %.03f, %.03f, %.03f : rotation", rotationQuaternion.x, rotationQuaternion.y, rotationQuaternion.z, rotationQuaternion.w);
 		MatrixScreenPrintf(0, kRowHeight, rotationMatrixQuaternion, "rotateMatrix");
 		Novice::ScreenPrintf(0, kRowHeight * 6, "%.03f, %.03f, %.03f : rotateByQuaternion", rotateByQuaternion.x, rotateByQuaternion.y, rotateByQuaternion.z);
-		Novice::ScreenPrintf(0, kRowHeight * 7, "%.03f, %.03f, %.03f : rotateByMatrix", rotateByMatrix.x, rotateByMatrix.y, rotateByMatrix.z);
+		Novice::ScreenPrintf(0, kRowHeight * 7, "%.03f, %.03f, %.03f : rotateByMatrix", rotateByMatrix.x, rotateByMatrix.y, rotateByMatrix.z);*/
+
+		Novice::ScreenPrintf(0, 0, "%.03f, %.03f, %.03f, %.03f : interpolate0", slerpResult0.x, slerpResult0.y, slerpResult0.z, slerpResult0.w);
+		Novice::ScreenPrintf(0, kRowHeight, "%.03f, %.03f, %.03f, %.03f : interpolate1", slerpResult1.x, slerpResult1.y, slerpResult1.z, slerpResult1.w);
+		Novice::ScreenPrintf(0, kRowHeight * 2, "%.03f, %.03f, %.03f, %.03f : interpolate2", slerpResult2.x, slerpResult2.y, slerpResult2.z, slerpResult2.w);
+		Novice::ScreenPrintf(0, kRowHeight * 3, "%.03f, %.03f, %.03f, %.03f : interpolate3", slerpResult3.x, slerpResult3.y, slerpResult3.z, slerpResult3.w);
+		Novice::ScreenPrintf(0, kRowHeight * 4, "%.03f, %.03f, %.03f, %.03f : interpolate4", slerpResult4.x, slerpResult4.y, slerpResult4.z, slerpResult4.w);
 
 		///
 		/// ↑描画処理ここまで
