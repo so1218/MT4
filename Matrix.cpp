@@ -471,3 +471,58 @@ Matrix4x4 MakeRotateMatrixQuaternion(const Quaternion& quaternion)
 
 	return result;
 }
+
+float Dot(const Quaternion& q1, const Quaternion& q2) {
+	return q1.w * q2.w + q1.x * q2.x + q1.y * q2.y + q1.z * q2.z;
+}
+
+Quaternion Slerp(const Quaternion& q0, const Quaternion& q1, float t)
+{
+	// tを0.0fから1.0fの範囲にクランプ
+	if (t < 0.0f) t = 0.0f;
+	if (t > 1.0f) t = 1.0f;
+
+	float cosTheta = Dot(q0, q1);
+	Quaternion finalQ1 = q1; 
+
+	// 最短経路で補間するために、ドット積が負の場合にq1の符号を反転させる
+	if (cosTheta < 0.0f)
+	{
+		cosTheta = -cosTheta;
+		finalQ1.w = -finalQ1.w;
+		finalQ1.x = -finalQ1.x;
+		finalQ1.y = -finalQ1.y;
+		finalQ1.z = -finalQ1.z;
+	}
+
+	// ほとんど同じクォータニオンの場合、Lerp（線形補間）にフォールバック
+	const float THRESHOLD = 0.9995f; 
+	if (cosTheta > THRESHOLD)
+	{
+		// 線形補間 (Lerp)
+		Quaternion result;
+		result.w = q0.w * (1.0f - t) + finalQ1.w * t;
+		result.x = q0.x * (1.0f - t) + finalQ1.x * t;
+		result.y = q0.y * (1.0f - t) + finalQ1.y * t;
+		result.z = q0.z * (1.0f - t) + finalQ1.z * t;
+		return Normalize(result);
+	}
+
+	// 角度を計算
+	float theta = acosf(cosTheta);
+
+	// Slerpの計算
+	float sinTheta = sinf(theta);
+	float invSinTheta = 1.0f / sinTheta;
+
+	float coeff0 = sinf((1.0f - t) * theta) * invSinTheta;
+	float coeff1 = sinf(t * theta) * invSinTheta;
+
+	Quaternion result;
+	result.w = q0.w * coeff0 + finalQ1.w * coeff1;
+	result.x = q0.x * coeff0 + finalQ1.x * coeff1;
+	result.y = q0.y * coeff0 + finalQ1.y * coeff1;
+	result.z = q0.z * coeff0 + finalQ1.z * coeff1;
+
+	return result;
+}
