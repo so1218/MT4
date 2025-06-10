@@ -422,11 +422,10 @@ Vector3 RotateVector(const Vector3& vector, const Quaternion& quaternion)
 	// ベクトルを純粋クォータニオンとして表現
 	Quaternion p = { vector.x, vector.y, vector.z, 0.0f };
 
-	// q * p * q_inv を計算 (q_inv は単位クォータニオンの場合 Conjugate(q) )
-	Quaternion q_inv = Conjugate(quaternion); // 単位クォータニオンであると仮定
+	Quaternion conj = Conjugate(quaternion); 
 
 	Quaternion temp = Multiply(quaternion, p);
-	Quaternion rotated_p = Multiply(temp, q_inv);
+	Quaternion rotated_p = Multiply(temp, conj);
 
 	// 結果のクォータニオンのベクトル部分が回転後のベクトル
 	Vector3 result;
@@ -444,40 +443,27 @@ Matrix4x4 MakeRotateMatrixQuaternion(const Quaternion& quaternion)
 	float z = quaternion.z;
 	float w = quaternion.w;
 
-	float x2 = x + x;
-	float y2 = y + y;
-	float z2 = z + z;
-	float xx = x * x2;
-	float xy = x * y2;
-	float xz = x * z2;
-	float yy = y * y2;
-	float yz = y * z2;
-	float zz = z * z2;
-	float wx = w * x2;
-	float wy = w * y2;
-	float wz = w * z2;
+	Matrix4x4 result;
 
-	Matrix4x4 result = MakeIdentityMatrix(); // 単位行列で初期化
+	// 1行目 
+	result.m[0][0] = 1.0f - 2.0f * y * y - 2.0f * z * z;
+	result.m[0][1] = 2.0f * x * y + 2.0f * w * z;
+	result.m[0][2] = 2.0f * x * z - 2.0f * w * y;
+	result.m[0][3] = 0.0f;                       
 
-	// 1行目
-	result.m[0][0] = 1.0f - (yy + zz);
-	result.m[0][1] = xy - wz;
-	result.m[0][2] = xz + wy;
-	result.m[0][3] = 0.0f; // 回転行列なので、通常最後の列は [0 0 0 1]^T の形
+	// 2行目 
+	result.m[1][0] = 2.0f * x * y - 2.0f * w * z;
+	result.m[1][1] = 1.0f - 2.0f * x * x - 2.0f * z * z;
+	result.m[1][2] = 2.0f * y * z + 2.0f * w * x;
+	result.m[1][3] = 0.0f;                       
 
-	// 2行目
-	result.m[1][0] = xy + wz;
-	result.m[1][1] = 1.0f - (xx + zz);
-	result.m[1][2] = yz - wx;
-	result.m[1][3] = 0.0f;
+	// 3行目 
+	result.m[2][0] = 2.0f * x * z + 2.0f * w * y;
+	result.m[2][1] = 2.0f * y * z - 2.0f * w * x;
+	result.m[2][2] = 1.0f - 2.0f * x * x - 2.0f * y * y;
+	result.m[2][3] = 0.0f;                       
 
-	// 3行目
-	result.m[2][0] = xz - wy;
-	result.m[2][1] = yz + wx;
-	result.m[2][2] = 1.0f - (xx + yy);
-	result.m[2][3] = 0.0f;
-
-	// 4行目
+	// 4行目 
 	result.m[3][0] = 0.0f;
 	result.m[3][1] = 0.0f;
 	result.m[3][2] = 0.0f;

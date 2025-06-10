@@ -179,13 +179,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Quaternion normal1 = Normalize(q1);
 	Quaternion mul1 = Multiply(q1, q2);
 	Quaternion mul2 = Multiply(q2, q1);
-	float norm1 = Norm(q1);
+	/*float norm1 = Norm(q1);*/
 
 	Quaternion rotationQuaternion = MakeRotateAxisAngleQuaternion(
 		Normalize(Vector3{ 1.0f,0.4f,-0.2f }), 0.45f);
 	Vector3 pointY = { 2.1f,-0.9f,1.3f };
-	Matrix4x4 rotationMatrixQuaternion = MakeRotateMatrixQuaternion(rotationQuaternion);
 	Vector3 rotateByQuaternion = RotateVector(pointY, rotationQuaternion);
+
+	Matrix4x4 rotationMatrixQuaternion = MakeRotateMatrixQuaternion(rotationQuaternion);
 	Vector3 rotateByMatrix = Transform(pointY, rotationMatrixQuaternion);
 
 	// ウィンドウの×ボタンが押されるまでループ
@@ -424,13 +425,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		MatrixScreenPrintf(0, kRowHeight * 10, rotateMatrix2, "rotateMatrix2");
 		plane.normal = Normalize(plane.normal);*/
 
-		Novice::ScreenPrintf(0, 0, "%.03f, %.03f, %.03f, %.03f : identity", identity.x, identity.y, identity.z, identity.w);
+		/*Novice::ScreenPrintf(0, 0, "%.03f, %.03f, %.03f, %.03f : identity", identity.x, identity.y, identity.z, identity.w);
 		Novice::ScreenPrintf(0, kRowHeight * 1, "%.03f, %.03f, %.03f, %.03f : conj", conj.x, conj.y, conj.z, conj.w);
 		Novice::ScreenPrintf(0, kRowHeight * 2, "%.03f, %.03f, %.03f, %.03f : inv", inv.x, inv.y, inv.z, inv.w);
 		Novice::ScreenPrintf(0, kRowHeight * 3, "%.03f, %.03f, %.03f, %.03f : normal1", normal1.x, normal1.y, normal1.z, normal1.w);
 		Novice::ScreenPrintf(0, kRowHeight * 4, "%.03f, %.03f, %.03f, %.03f : mul1", mul1.x, mul1.y, mul1.z, mul1.w);
 		Novice::ScreenPrintf(0, kRowHeight * 5, "%.03f, %.03f, %.03f, %.03f : mul2", mul2.x, mul2.y, mul2.z, mul2.w);
-		Novice::ScreenPrintf(0, kRowHeight * 6, "%.03f : norm1", norm1);
+		Novice::ScreenPrintf(0, kRowHeight * 6, "%.03f : norm1", norm1);*/
+
+		Novice::ScreenPrintf(0, 0, "%.03f, %.03f, %.03f, %.03f : rotation", rotationQuaternion.x, rotationQuaternion.y, rotationQuaternion.z, rotationQuaternion.w);
+		MatrixScreenPrintf(0, kRowHeight, rotationMatrixQuaternion, "rotateMatrix");
+		Novice::ScreenPrintf(0, kRowHeight * 6, "%.03f, %.03f, %.03f : rotateByQuaternion", rotateByQuaternion.x, rotateByQuaternion.y, rotateByQuaternion.z);
+		Novice::ScreenPrintf(0, kRowHeight * 7, "%.03f, %.03f, %.03f : rotateByMatrix", rotateByMatrix.x, rotateByMatrix.y, rotateByMatrix.z);
 
 		///
 		/// ↑描画処理ここまで
