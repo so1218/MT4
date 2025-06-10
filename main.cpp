@@ -170,6 +170,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Normalize(Vector3{ 1.0f,0.0f,0.0f }), Normalize(Vector3{ -1.0f,0.0f,0.0f }));
 	Matrix4x4 rotateMatrix1 = DirectionToDirection(from0, to0);
 	Matrix4x4 rotateMatrix2 = DirectionToDirection(from1, to1);
+
+	Quaternion q1 = { 2.0f,3.0f,4.0f,1.0f };
+	Quaternion q2 = { 1.0f,3.0f,5.0f,2.0f };
+	Quaternion identity = IdentityQuaternion();
+	Quaternion conj = Conjugate(q1);
+	Quaternion inv = Inverse(q1);
+	Quaternion normal1 = Normalize(q1);
+	Quaternion mul1 = Multiply(q1, q2);
+	Quaternion mul2 = Multiply(q2, q1);
+	float norm1 = Norm(q1);
+
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
 		// フレームの開始
@@ -401,10 +412,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::End();
 
 		/*MatrixScreenPrintf(0, 0, rotationMatrix, "rotateMatrix");*/
-		MatrixScreenPrintf(0, 0, rotateMatrix0, "rotateMatrix0");
+		/*MatrixScreenPrintf(0, 0, rotateMatrix0, "rotateMatrix0");
 		MatrixScreenPrintf(0, kRowHeight * 5, rotateMatrix1, "rotateMatrix1");
 		MatrixScreenPrintf(0, kRowHeight * 10, rotateMatrix2, "rotateMatrix2");
-		plane.normal = Normalize(plane.normal);
+		plane.normal = Normalize(plane.normal);*/
+
+		Novice::ScreenPrintf(0, 0, "%.03f, %.03f, %.03f, %.03f", identity.x, identity.y, identity.z, identity.w);
+		Novice::ScreenPrintf(0, kRowHeight * 1, "%.03f, %.03f, %.03f, %.03f", conj.x, conj.y, conj.z, conj.w);
+		Novice::ScreenPrintf(0, kRowHeight * 2, "%.03f, %.03f, %.03f, %.03f", inv.x, inv.y, inv.z, inv.w);
+		Novice::ScreenPrintf(0, kRowHeight * 3, "%.03f, %.03f, %.03f, %.03f", normal1.x, normal1.y, normal1.z, normal1.w);
+		Novice::ScreenPrintf(0, kRowHeight * 4, "%.03f, %.03f, %.03f, %.03f", mul1.x, mul1.y, mul1.z, mul1.w);
+		Novice::ScreenPrintf(0, kRowHeight * 5, "%.03f, %.03f, %.03f, %.03f", mul2.x, mul2.y, mul2.z, mul2.w);
+		Novice::ScreenPrintf(0, kRowHeight * 6, "%.03f", norm1);
 
 		///
 		/// ↑描画処理ここまで

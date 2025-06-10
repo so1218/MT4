@@ -227,5 +227,4 @@ struct Capsule
 struct Quaternion
 {
 	float x, y, z, w;
-
 };

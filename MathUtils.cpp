@@ -106,10 +106,58 @@ Vector3 ClosestPointOnSegment(const Vector3& p, const Segment& seg)
 
 Quaternion Multiply(const Quaternion& lhs, const Quaternion& rhs)
 {
-	return {
-		lhs.w * rhs.x + lhs.x * rhs.w + lhs.y * rhs.z - lhs.z * rhs.y,
-		lhs.w * rhs.y - lhs.x * rhs.z + lhs.y * rhs.w + lhs.z * rhs.x,
-		lhs.w * rhs.z + lhs.x * rhs.y - lhs.y * rhs.x + lhs.z * rhs.w,
+	return
+	{
+		lhs.y * rhs.z - lhs.z * rhs.y + lhs.x * rhs.w + lhs.w * rhs.x,
+		lhs.z * rhs.x - lhs.x * rhs.z + lhs.y * rhs.w + lhs.w * rhs.y,
+		lhs.x * rhs.y - lhs.y * rhs.x + lhs.z * rhs.w + lhs.w * rhs.z,
 		lhs.w * rhs.w - lhs.x * rhs.x - lhs.y * rhs.y - lhs.z * rhs.z
 	};
+}
+
+Quaternion IdentityQuaternion()
+{
+	return { 0.0f, 0.0f, 0.0f, 1.0f };
+}
+
+Quaternion Conjugate(const Quaternion& quaternion)
+{
+	return { -quaternion.x, -quaternion.y, -quaternion.z, quaternion.w };
+}
+
+float Norm(const Quaternion& quaternion)
+{
+	return std::sqrt(quaternion.x * quaternion.x + quaternion.y * quaternion.y +
+		quaternion.z * quaternion.z + quaternion.w * quaternion.w);
+}
+
+Quaternion Normalize(const Quaternion& quaternion)
+{
+	float norm = Norm(quaternion);
+	if (norm == 0.0f)
+	{
+		return IdentityQuaternion();
+	}
+	return { quaternion.x / norm, quaternion.y / norm, quaternion.z / norm, quaternion.w / norm };
+}
+
+Quaternion Inverse(const Quaternion& quaternion)
+{
+	float length = Norm(quaternion); 
+
+	if (length < 0.000001f) 
+	{
+		return IdentityQuaternion();
+	}
+
+	float invLengthSq = 1.0f / (length * length);
+
+	Quaternion result;
+
+	result.w = quaternion.w * invLengthSq;
+	result.x = -quaternion.x * invLengthSq;
+	result.y = -quaternion.y * invLengthSq;
+	result.z = -quaternion.z * invLengthSq;
+
+	return result;
 }
